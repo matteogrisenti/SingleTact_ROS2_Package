@@ -1,5 +1,32 @@
 # SingleTact_ROS2_Package
+This package contains a **ROS 2 Python node** designed to communicate with the **SingleTact USB sensor** to request and receive data. It is built following the official [SingleTact NETInterface repository](https://github.com/SingleTact/NETInterface) and official documentation.
 
+The main functionalities built into this node are:
+1. **Sensor Data Publication**: Reads sensor data and publishes it to a ROS 2 topic: `/singletact_force`.
+2. **Data Recording**: Enables recording of the captured data into a CSV file for post-processing.
+
+---
+
+## Sensor Data Publication
+The node communicates with the sensor microcontroller to extract two main features: the **timestamp** of the measurement and the **measured force**. This information is published on the ROS 2 topic `/singletact_force` using a `std_msgs/msg/Float64MultiArray` message, where:
+
+* **`msg.data[0]`**: Timestamp
+* **`msg.data[1]`**: Force measurement
+
+To launch the sensor publication, follow these steps:
+
+1. **Clone the repository** into the `src` folder of your ROS 2 workspace.
+2. **Build the package** and source the setup files:
+    ```bash
+    colcon build --packages-select singletact_ros2
+    source install/setup.bash
+    ```
+3. Run the node from the terminal using the following command:
+    ```bash
+    ros2 run singletact_ros2 singletact_usb_node --ros-args -p port:=/dev/ttyACM0 -p sensor_rating:=1.0
+    ```
+    
+---
 
 ## Data Recording Functionality
 The node include a recording data system that allows to save the sensor data in a CSV file for later analysis. It can be turned on or off with a ros parameter: `record_data` and also the store path of the CSV file can be set with the ros parameter `csv_dir`. 
